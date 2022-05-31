@@ -6,9 +6,9 @@ export const Input: React.FC<IInput> = (props: IInput) =>
 {
   const [isChecked, setIsChecked] = React.useState<boolean>(false)
   const context = React.useContext(Context);
-  const onChangeHandler = () =>
-  {
+  const onChangeHandler = () => {
     let previousValue = null;
+    const previousCompleteSectionIds = [...context.completeSectionIds];
     if (isChecked)
     {
       // @ts-ignore
@@ -20,9 +20,16 @@ export const Input: React.FC<IInput> = (props: IInput) =>
       previousValue = context.store[`${props.section_name.toLowerCase()}_checked_count`] += 1;
     }
     // @ts-ignore
+    if (previousValue !== context.store[`${props.section_name.toLowerCase()}_count`] && previousCompleteSectionIds.includes(props.section_id)  && previousCompleteSectionIds.length > 0)
+    {
+      previousCompleteSectionIds.pop();
+      context.setCompleteSectionIds(previousCompleteSectionIds);
+    }
+    // @ts-ignore
     if (previousValue === context.store[`${props.section_name.toLowerCase()}_count`])
     {
-      context.setCompleteSectionIds([...context.completeSectionIds, props.section_id]);
+      previousCompleteSectionIds.push(props.section_id)
+      context.setCompleteSectionIds(previousCompleteSectionIds);
       if (context.completeSectionIds.length + 1 === (Object.keys(context.store).length / 2))
       {
         fetch('https://uselessfacts.jsph.pl/random.json')
