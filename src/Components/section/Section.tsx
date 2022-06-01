@@ -1,32 +1,30 @@
 import React from "react";
-import {ISection} from "../../interfaces/interfaces";
+import { ISection, IContentItem } from "../../interfaces/interfaces";
 import { Input } from "../input/Input";
 import { FiCheck } from "react-icons/fi";
-import { Context } from "../../context/Context";
-
 
 export const Section: React.FC<ISection> = (props: ISection) => {
-  const context = React.useContext(Context);
 
   return (
-    <div>
+    <>
       <p className="my_startup__list-header">
         <span className="number">{props.id}</span>
         <span className="title">{props.title}</span>
-        {// @ts-ignore
-          (context.store[`${props.title.toLowerCase()}_checked_count`] === context.store[`${props.title.toLowerCase()}_count`]) && <span className="done">{<FiCheck/>}</span>}
+        {
+          props.list.findIndex((item: IContentItem) => !item.isChecked) < 0 && <span className="done"><FiCheck/></span>
+        }
       </p>
       <div className="my_startup__list-items">
-      {props.list.map((item: string, index: number) => (
+        {props.list.map((item: IContentItem) => (
           <Input
-            key = {index}
-            title = {item}
-            section_name = {props.title}
-            section_id ={props.id}
-          />
-        ))
-      }
+            key = {item.id}
+            id= {item.id}
+            title={item.title}
+            isChecked={item.isChecked}
+            sectionId = {props.id}
+          />))
+        }
       </div>
-    </div>
+    </>
   )
 }
