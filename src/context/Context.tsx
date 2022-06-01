@@ -1,16 +1,12 @@
 import React from "react";
-import {IStore} from "../interfaces/interfaces";
+import {IContent} from "../interfaces/interfaces";
 
-export const Context: React.Context<{ store: IStore, setStore: (argument: IStore) => void, setCompleteSectionIds: (argument: number[]) => void, completeSectionIds: number[] | any }> = React.createContext({
-  setStore: ( argument: IStore ) => {},
-  store: {
-    foundation_count: 0,
-    discovery_count: 0,
-    delivery_count: 0,
-    foundation_checked_count: 0,
-    discovery_checked_count: 0,
-    delivery_checked_count: 0
-  },
-  setCompleteSectionIds: (argument: number[]) => {},
-  completeSectionIds: []
+// @ts-ignore
+export const Context: React.Context<{ store: Array<IContent>, setStore?: (argument: IContent[]) => void }> = React.createContext({
+  store: [{
+    id: 1,
+    title: "Foundation",
+    list: [{ id: 1, title: "Setup virtual office", isChecked: false }]
+  }],
+  setStore: (argument: IContent[]) => {}
 });
